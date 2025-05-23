@@ -74,17 +74,22 @@ const ImageSlideshow = () => {
   }, [slides.length]);
 
   const handleButtonClick = () => {
-    // 링크가 상대 경로인지 확인
-    const link = slides[currentSlide].link;
+    // 링크 가져오기
+    let link = slides[currentSlide].link;
     
-    // 링크가 http:// 또는 https://로 시작하는지 확인
+    // 링크 형식 처리
     if (link.startsWith('http://') || link.startsWith('https://')) {
       // 이미 전체 URL이면 그대로 사용
-      window.open(link, '_blank');
-    } else {
-      // 상대 경로인 경우 새 창에서 열기
-      window.open(link, '_blank');
+    } else if (link.startsWith('www.')) {
+      // www로 시작하는 경우 https:// 추가
+      link = 'https://' + link;
+    } else if (!link.includes('://') && !link.startsWith('/')) {
+      // 도메인으로 보이는 경우 https:// 추가
+      link = 'https://' + link;
     }
+    
+    // 새 창에서 링크 열기
+    window.open(link, '_blank');
   };
 
   // 로딩 중이거나 오류 발생 시 표시할 내용
